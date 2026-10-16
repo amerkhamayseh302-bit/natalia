@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Outfit', 'Cairo', system-ui, -apple-system, sans-serif;
+  --font-arabic: 'Cairo', sans-serif;
+  --color-gold-50: #fff4f6;
+  --color-gold-100: #f9d9e0;
+  --color-gold-300: #efb1c0;
+  --color-gold-400: #e58fa3;
+  --color-gold-500: #c96b83;
+  --color-gold-600: #b95770;
+  --color-gold-900: #9b5b6d;
+}
+
+:root {
+  --natalia-background: #171214;
+  --natalia-card: #211a1d;
+  --natalia-primary: #e58fa3;
+  --natalia-primary-hover: #f0a6b8;
+  --natalia-secondary: #9b5b6d;
+  --natalia-text: #fff4f6;
+  --natalia-muted: #bdaeb2;
+  --natalia-border: #392b30;
+}
+
+body {
+  font-family: 'Outfit', 'Cairo', system-ui, -apple-system, sans-serif;
+  background: var(--natalia-background);
+  color: var(--natalia-text);
+  overflow-x: hidden;
+  transition: background-color .25s ease, color .25s ease;
+}
+
+body.light {
+  --natalia-background: #fff9fa;
+  --natalia-card: #ffffff;
+  --natalia-primary: #c96b83;
+  --natalia-primary-hover: #b95770;
+  --natalia-secondary: #e8a7b5;
+  --natalia-text: #2b2023;
+  --natalia-muted: #806f74;
+  --natalia-border: #f0dde1;
+}
+
+/* Existing utility classes are remapped so storefront and dashboard share Natalia's palette. */
+.bg-black, .bg-\[\#070709\], .bg-\[\#08080a\], .bg-\[\#050507\] { background-color: var(--natalia-background) !important; }
+.bg-zinc-950, .bg-\[\#0d0d11\], .bg-\[\#0e0e12\], .bg-zinc-900, .bg-zinc-800 { background-color: var(--natalia-card) !important; }
+.bg-zinc-950\/40, .bg-zinc-950\/60, .bg-zinc-900\/10, .bg-zinc-900\/30, .bg-zinc-900\/35, .bg-zinc-900\/40, .bg-zinc-900\/50, .bg-zinc-900\/60, .bg-zinc-900\/80, .bg-zinc-900\/90, .bg-\[\#0d0d11\]\/25, .bg-\[\#0d0d11\]\/40, .bg-\[\#0d0d11\]\/45, .bg-\[\#0d0d11\]\/80, .bg-\[\#0e0e12\]\/60 { background-color: color-mix(in srgb, var(--natalia-card) 82%, transparent) !important; }
+.bg-black\/60, .bg-black\/70, .bg-black\/75, .bg-black\/80, .bg-black\/90, .bg-black\/95 { background-color: color-mix(in srgb, var(--natalia-background) 92%, transparent) !important; }
+.border-zinc-950, .border-zinc-900, .border-zinc-800, .border-zinc-850, .border-zinc-700, .border-zinc-900\/60, .border-zinc-900\/80 { border-color: var(--natalia-border) !important; }
+.text-white, .text-zinc-100, .text-zinc-200, .text-zinc-300, .text-\[\#f5ecd2\] { color: var(--natalia-text) !important; }
+.text-zinc-400, .text-zinc-500, .text-zinc-550, .text-zinc-600, .text-zinc-650 { color: var(--natalia-muted) !important; }
+
+.text-gold-400, .text-gold-500 { color: var(--natalia-primary) !important; }
+.border-gold-400, .border-gold-400\/30, .border-gold-400\/40, .border-gold-400\/50 { border-color: var(--natalia-primary) !important; }
+.bg-gold-400, .bg-gold-400\/5, .bg-gold-400\/10, .bg-gold-400\/15 { background-color: var(--natalia-primary) !important; }
+.bg-gold-400, .bg-gold-400.text-black, .text-black.bg-gold-400 { color: #fff !important; }
+.hover\:bg-gold-500:hover { background-color: var(--natalia-primary-hover) !important; color: #fff !important; }
+.hover\:text-gold-400:hover, .hover\:text-gold-500:hover { color: var(--natalia-primary-hover) !important; }
+.hover\:border-gold-400:hover { border-color: var(--natalia-primary-hover) !important; }
+.hover\:bg-zinc-900:hover, .hover\:bg-zinc-850:hover, .hover\:bg-zinc-800:hover { background-color: color-mix(in srgb, var(--natalia-secondary) 28%, var(--natalia-card)) !important; }
+.hover\:border-zinc-700:hover, .hover\:border-zinc-800:hover { border-color: var(--natalia-secondary) !important; }
+.hover\:text-white:hover, .hover\:text-zinc-100:hover, .hover\:text-zinc-200:hover { color: var(--natalia-text) !important; }
+
+input, textarea, select, .admin-input { background-color: var(--natalia-card) !important; border-color: var(--natalia-border) !important; color: var(--natalia-text) !important; }
+input::placeholder, textarea::placeholder { color: var(--natalia-muted) !important; }
+input:focus, textarea:focus, select:focus, .admin-input:focus { border-color: var(--natalia-primary) !important; box-shadow: 0 0 0 2px color-mix(in srgb, var(--natalia-primary) 25%, transparent) !important; }
+.admin-input option { background: var(--natalia-card); color: var(--natalia-text); }
+header, footer { border-color: var(--natalia-border) !important; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--natalia-background); }
+::-webkit-scrollbar-thumb { background: var(--natalia-secondary); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--natalia-primary); }
+.shimmer { background: linear-gradient(90deg, var(--natalia-card) 25%, color-mix(in srgb, var(--natalia-secondary) 30%, var(--natalia-card)) 50%, var(--natalia-card) 75%); background-size: 200% 100%; animation: loading-shimmer 1.5s infinite; }
+@keyframes loading-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.gold-gradient { background: linear-gradient(135deg, var(--natalia-secondary), var(--natalia-primary)); }
+.gold-text { background: linear-gradient(135deg, var(--natalia-primary-hover), var(--natalia-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.animate-marquee-track { display: flex; width: max-content; animation: marquee 28s linear infinite; white-space: nowrap; will-change: transform; }
+.animate-marquee-track:hover { animation-play-state: paused; }
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: .1s; }
+.reveal-delay-2 { transition-delay: .2s; }
+.reveal-delay-3 { transition-delay: .3s; }
+.reveal-delay-4 { transition-delay: .45s; }
+.gold-divider { display: block; width: 0; height: 2px; margin: .75rem auto 0; background: var(--natalia-primary); transition: width .8s ease; }
+.gold-divider.is-visible { width: 4rem; }
+.card-lift { transition: transform .35s ease, box-shadow .35s ease; }
+.card-lift:hover { transform: translateY(-4px); box-shadow: 0 18px 34px color-mix(in srgb, var(--natalia-primary) 16%, transparent); }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } .card-lift:hover { transform: none; } .animate-marquee-track { animation: none; } }

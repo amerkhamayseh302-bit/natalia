@@ -1,0 +1,281 @@
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
+import { useCart } from '../context/CartContext';
+// import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import { ShoppingBag, Heart, Menu, X, Sun, Moon, Instagram, Facebook, MessageCircle } from 'lucide-react';
+import { SearchWithAutocomplete } from './SearchWithAutocomplete';
+
+export const Navbar: React.FC = () => {
+    const { language, setLanguage, direction, t } = useLanguage();
+    const { cart, wishlist } = useCart();
+    // const { isAuthenticated, logout } = useAuth();
+    const { theme, toggleTheme } = useTheme();
+    const location = useLocation();
+
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Close mobile menu on route change
+    useEffect(() => {
+        setMobileMenuOpen(false);
+    }, [location]);
+
+    const handleLangChange = (lang: 'ar' | 'en' | 'he') => {
+        setLanguage(lang);
+        setLangDropdownOpen(false);
+    };
+
+    const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+    return (
+        <header className={`sticky top-0 z-40 transition-all duration-300 ${isScrolled ? 'backdrop-blur-md bg-black/90 border-b border-zinc-900 shadow-lg' : 'bg-black/95'
+            }`}>
+            {/* Top micro-bar for quick links */}
+            <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center text-xs border-b border-zinc-900 border-opacity-50 text-zinc-400">
+                <div>
+                    <span>{t('stockStatus')}</span>
+                </div>
+                <div className="flex items-center gap-4">
+                    {/* Social Media Icons */}
+                    <a
+                        href="https://www.facebook.com/amer.khamayseh.3"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-zinc-400 hover:text-blue-500 transition-colors p-1"
+                        title="Facebook"
+                    >
+                        <Facebook size={18} />
+                    </a>
+                    <a
+                        href="https://www.instagram.com/natalia.pa303/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-zinc-400 hover:text-white transition-colors p-1"
+                        title="Instagram"
+                    >
+                        <Instagram size={18} />
+                    </a>
+                    <a
+                        href="https://wa.me/972567598142"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-zinc-400 hover:text-emerald-500 transition-colors p-1"
+                        title="WhatsApp"
+                    >
+                        <MessageCircle size={18} />
+                    </a>
+                </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto px-4 md:px-8">
+                <div className="flex items-center h-16 md:h-20 gap-3 md:gap-4">
+
+                    {/* Mobile: Hamburger | Desktop: hidden (logo on left) */}
+                    <button
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        className="md:hidden flex-shrink-0 text-zinc-100 p-2 hover:bg-zinc-900 rounded-lg cursor-pointer"
+                        aria-label="Toggle menu"
+                    >
+                        {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                    </button>
+
+                    {/* Logo — left on desktop, hidden on mobile (space saved for search) */}
+                    <div className="hidden md:flex flex-shrink-0">
+                        <Link to="/" className="flex items-center select-none group">
+                            <img
+                                src="/natalia-logo.png"
+                                alt="Natalia Store logo"
+                                className="h-14 w-auto object-contain group-hover:opacity-90 transition-opacity"
+                            />
+                        </Link>
+                    </div>
+
+                    {/* Mobile logo — compact, centred feel */}
+                    <div className="md:hidden flex-shrink-0">
+                        <Link to="/" className="flex items-center select-none group">
+                            <img
+                                src="/natalia-logo.png"
+                                alt="Natalia Store logo"
+                                className="h-9 w-auto object-contain group-hover:opacity-90 transition-opacity"
+                            />
+                        </Link>
+                    </div>
+
+                    {/* Search bar — visible on ALL screen sizes */}
+                    <SearchWithAutocomplete className="flex-1" />
+
+                    {/* Icons row */}
+                    <div className="flex items-center gap-1 md:gap-5 flex-shrink-0">
+                        {/* Language Switcher */}
+                        <div className="relative text-sm">
+                            <button
+                                onClick={() => setLangDropdownOpen(prev => !prev)}
+                                className="flex items-center gap-1 text-zinc-300 hover:text-gold-400 py-2 cursor-pointer font-medium tracking-wide"
+                            >
+                                <span className="text-base">
+                                    {language === 'ar' ? '🇸🇦' : language === 'he' ? '🇮🇱' : '🇬🇧'}
+                                </span>
+                                <span className="hidden md:inline text-sm">{t('languageName')}</span>
+                            </button>
+
+                            {langDropdownOpen && (
+                                <>
+                                    <div
+                                        className="fixed inset-0 z-40"
+                                        onClick={() => setLangDropdownOpen(false)}
+                                    />
+                                    <div className={`absolute top-full z-50 bg-zinc-950 border border-zinc-900 rounded-lg shadow-2xl py-1.5 min-w-[130px] mt-1 ${direction === 'rtl' ? 'left-0' : 'right-0'}`}>
+                                        <button
+                                            onClick={() => handleLangChange('ar')}
+                                            className={`w-full text-left px-4 py-2.5 text-xs flex items-center gap-2 hover:bg-zinc-900 hover:text-white cursor-pointer ${language === 'ar' ? 'text-gold-400 font-bold' : 'text-zinc-300'}`}
+                                            style={{ textAlign: direction === 'rtl' ? 'right' : 'left' }}
+                                        >
+                                            <span>🇸🇦</span> <span>العربية</span>
+                                        </button>
+                                        <button
+                                            onClick={() => handleLangChange('he')}
+                                            className={`w-full text-left px-4 py-2.5 text-xs flex items-center gap-2 hover:bg-zinc-900 hover:text-white cursor-pointer ${language === 'he' ? 'text-gold-400 font-bold' : 'text-zinc-300'}`}
+                                            style={{ textAlign: direction === 'rtl' ? 'right' : 'left' }}
+                                        >
+                                            <span>🇮🇱</span> <span>עברית</span>
+                                        </button>
+                                        <button
+                                            onClick={() => handleLangChange('en')}
+                                            className={`w-full text-left px-4 py-2.5 text-xs flex items-center gap-2 hover:bg-zinc-900 hover:text-white cursor-pointer ${language === 'en' ? 'text-gold-400 font-bold' : 'text-zinc-300'}`}
+                                            style={{ textAlign: direction === 'rtl' ? 'right' : 'left' }}
+                                        >
+                                            <span>🇬🇧</span> <span>English</span>
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
+                        {/* Theme Toggle */}
+                        <button
+                            onClick={toggleTheme}
+                            className="p-2 text-zinc-300 hover:text-gold-400 transition-colors cursor-pointer"
+                            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                        >
+                            {theme === 'dark' ? <Sun size={19} /> : <Moon size={19} />}
+                        </button>
+
+                        {/* Wishlist */}
+                        <Link
+                            to="/wishlist"
+                            className="p-2 text-zinc-300 hover:text-rose-500 transition-colors relative"
+                            title={t('wishlist')}
+                        >
+                            <Heart size={20} className={wishlist.length > 0 ? 'fill-rose-500 text-rose-500' : ''} />
+                            {wishlist.length > 0 && (
+                                <span className="absolute top-1 right-1 w-4 h-4 bg-rose-600 text-white rounded-full text-[9px] font-bold flex items-center justify-center">
+                                    {wishlist.length}
+                                </span>
+                            )}
+                        </Link>
+
+                        {/* Cart */}
+                        <Link
+                            to="/cart"
+                            className="p-2 text-zinc-300 hover:text-gold-400 transition-colors relative"
+                            title={t('cart')}
+                        >
+                            <ShoppingBag size={20} />
+                            {cartCount > 0 && (
+                                <span className="absolute top-1 right-1 w-4 h-4 bg-gold-400 text-black rounded-full text-[9px] font-extrabold flex items-center justify-center">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </Link>
+                    </div>
+                </div>
+            </div>
+
+            {/* Main Pages Nav Links - Desktop */}
+            <nav className="border-t border-zinc-900/60 bg-black/60 hidden md:block select-none">
+                <div className="max-w-7xl mx-auto px-8 flex justify-center items-center gap-8 h-12 text-sm font-semibold tracking-wide text-zinc-300">
+                    <Link to="/" className="hover:text-gold-400 transition-colors py-1.5 border-b-2 border-transparent hover:border-gold-400">{t('home')}</Link>
+                    <Link to="/products?category=all" className="hover:text-gold-400 transition-colors py-1.5 border-b-2 border-transparent hover:border-gold-400">{t('categories')}</Link>
+                    <Link to="/products?brand=all" className="hover:text-gold-400 transition-colors py-1.5 border-b-2 border-transparent hover:border-gold-400">{t('brands')}</Link>
+                </div>
+            </nav>
+
+            {/* Mobile Drawer Backdrop */}
+            {mobileMenuOpen && (
+                <div
+                    className="fixed inset-0 top-0 z-30 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+                    onClick={() => setMobileMenuOpen(false)}
+                />
+            )}
+
+            {/* Mobile Drawer Menu */}
+            <div className={`fixed top-0 bottom-0 z-30 w-72 max-w-sm bg-zinc-950 border-r border-zinc-900 p-6 flex flex-col justify-between transition-transform duration-300 ${mobileMenuOpen
+                    ? 'translate-x-0'
+                    : direction === 'rtl' ? 'translate-x-full' : '-translate-x-full'
+                }`}
+                style={{
+                    right: direction === 'rtl' ? 0 : 'auto',
+                    left: direction === 'rtl' ? 'auto' : 0,
+                    borderLeftWidth: direction === 'rtl' ? '1px' : '0px',
+                    borderRightWidth: direction === 'rtl' ? '0px' : '1px'
+                }}
+            >
+                <div className="space-y-8 select-none">
+                    {/* Mobile search */}
+                    <SearchWithAutocomplete 
+                        className="w-full"
+                        onSubmit={() => setMobileMenuOpen(false)}
+                    />
+
+                    {/* Navigation Links */}
+                    <div className="flex flex-col gap-4 text-base font-semibold">
+                        <Link to="/" className="w-full py-2 hover:text-gold-400 border-b border-zinc-900 transition-colors">{t('home')}</Link>
+                        <Link to="/products?category=all" className="w-full py-2 hover:text-gold-400 border-b border-zinc-900 transition-colors">{t('categories')}</Link>
+                        <Link to="/products?brand=all" className="w-full py-2 hover:text-gold-400 border-b border-zinc-900 transition-colors">{t('brands')}</Link>
+                    </div>
+
+                    {/* Language Switcher - Mobile */}
+                    <div className="border-t border-zinc-900 pt-4">
+                        <p className="text-[10px] uppercase font-extrabold tracking-widest text-zinc-600 mb-3">{t('switchLanguage')}</p>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => { handleLangChange('ar'); setMobileMenuOpen(false); }}
+                                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold border transition-all cursor-pointer ${language === 'ar' ? 'bg-gold-400 text-black border-gold-400' : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-white'}`}
+                            >
+                                <span>🇸🇦</span> <span>العربية</span>
+                            </button>
+                            <button
+                                onClick={() => { handleLangChange('he'); setMobileMenuOpen(false); }}
+                                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold border transition-all cursor-pointer ${language === 'he' ? 'bg-gold-400 text-black border-gold-400' : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-white'}`}
+                            >
+                                <span>🇮🇱</span> <span>עברית</span>
+                            </button>
+                            <button
+                                onClick={() => { handleLangChange('en'); setMobileMenuOpen(false); }}
+                                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold border transition-all cursor-pointer ${language === 'en' ? 'bg-gold-400 text-black border-gold-400' : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-white'}`}
+                            >
+                                <span>🇬🇧</span> <span>EN</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Footer info in drawer */}
+                <div className="text-zinc-600 text-xs text-center border-t border-zinc-900 pt-4">
+                    <p className="mt-1">Natalia Store</p>
+                </div>
+            </div>
+        </header>
+    );
+};
